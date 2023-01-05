@@ -165,10 +165,8 @@ const niconicoRegexp = RegExp(
 const headers = {
   'Access-Control-Allow-Credentials': 'true',
   'Access-Control-Allow-Origin': 'https://www.nicovideo.jp',
-  Connection: 'keep-alive',
   'Content-Type': 'application/json',
-  'User-Agent':
-    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.72 Safari/537.36 Edg/89.0.774.45',
+  'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.72 Safari/537.36 Edg/89.0.774.45',
   Accept: '*/*',
   'Accept-Encoding': 'gzip, deflate, br',
   Origin: 'https://www.nicovideo.jp',
