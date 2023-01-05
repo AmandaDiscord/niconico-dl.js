@@ -60,8 +60,5 @@ typings/
 # IDE / Editer
 .idea
 
-# Output folder
-dist
-
 # Video file
 *.mp4

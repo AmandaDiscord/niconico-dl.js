@@ -1,21 +1,29 @@
 {
-  "compilerOptions": {
-    "target": "es5",
-    "module": "commonjs",
-    "strict": true,
-    "declaration": true,
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
-    "baseUrl": ".",
-    "paths": {
-      "@/*": [
-        "./*"
-      ]
-    },
-    "outDir": "dist"
-  },
-  "exclude": [
-    "node_modules"
-  ]
+	"compilerOptions": {
+		"allowSyntheticDefaultImports": true,
+		"allowJs": true,
+		"checkJs": true,
+		"esModuleInterop": true,
+		"declaration": false,
+		"emitDecoratorMetadata": false,
+		"experimentalDecorators": false,
+		"incremental": true,
+		"lib": ["esnext", "dom"],
+		"module": "commonjs",
+		"moduleResolution": "node",
+		"noUnusedLocals": false,
+		"outDir": "./dist",
+		"pretty": true,
+		"removeComments": true,
+		"resolveJsonModule": true,
+		"sourceMap": true,
+		"skipLibCheck": true,
+		"strictFunctionTypes": true,
+		"strictBindCallApply": true,
+		"strictNullChecks": true,
+		"target": "ES2020",
+		"types": ["node"]
+	},
+	"include": ["./src"],
+	"exclude": ["node_modules"]
 }
