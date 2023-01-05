@@ -1,5 +1,4 @@
-import fetch from 'node-fetch'
-import { parse } from 'node-html-parser'
+/* eslint-disable prettier/prettier */
 import internal from 'stream'
 import Timeout = NodeJS.Timeout
 
@@ -184,6 +183,8 @@ export function isValidURL(url: string): boolean {
   return niconicoRegexp.test(url)
 }
 
+const dataMatcher = /data-api-data="([^"]+)"/
+
 class NiconicoDL {
   private videoURL: string
   private data: NiconicoAPIData | undefined
@@ -201,13 +202,10 @@ class NiconicoDL {
   }
 
   async getVideoInfo(): Promise<VideoInfo> {
-    const videoSiteDom = parse(
-      await (await fetch(this.videoURL, { headers })).text()
-    )
-    const matchResult = videoSiteDom
-      .querySelectorAll('div')
-      .filter((a) => a.rawAttributes.id === 'js-initial-watch-data')
-    if (matchResult.length === 0) {
+    const response = await fetch(this.videoURL, { headers })
+    const data = await response.text()
+    const match = data.match(dataMatcher)
+    if (!match) {
       throw Error('Failed get video site html...')
     }
     const patterns = {
@@ -218,7 +216,7 @@ class NiconicoDL {
       '&#x27;': "'",
       '&#x60;': '`',
     }
-    const fixedString = matchResult[0].rawAttributes['data-api-data'].replace(
+    const fixedString = match[1].replace(
       /&(lt|gt|amp|quot|#x27|#x60);/g,
       function (match: string): string {
         // @ts-ignore
@@ -363,16 +361,9 @@ class NiconicoDL {
   }
 
   async download(
-    newTypeStream: true,
     autoStopHeartBeat?: boolean
   ): Promise<internal.Readable>
   async download(
-    newTypeStream: false,
-    autoStopHeartBeat?: boolean
-  ): Promise<NodeJS.ReadableStream>
-  async download(): Promise<NodeJS.ReadableStream>
-  async download(
-    newTypeStream: boolean = false,
     autoStopHeartBeat: boolean = true
   ) {
     const url = await this.getDownloadLink()
@@ -380,12 +371,9 @@ class NiconicoDL {
     const res = await fetch(url, {
       headers: mp4Headers,
     })
-    let binary: internal.Readable | NodeJS.ReadableStream = res.body
-    if (newTypeStream) {
-      binary = new internal.Readable().wrap(binary)
-    }
+    const binary = internal.Readable.fromWeb(res.body as import("stream/web").ReadableStream<any>)
     if (autoStopHeartBeat) {
-      binary.on('finish', () => {
+      binary.once('finish', () => {
         // automatically stop heartbeat
         this.stop()
       })
